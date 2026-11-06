@@ -1,0 +1,27 @@
+/* Story frames only (not shipped): card widths for the business chart stories. */
+.sb-biz-frame {
+  box-sizing: border-box;
+  inline-size: 100%;
+  padding: 16px;
+  border: 1px solid var(--vl-border);
+  border-radius: var(--vl-radius-l);
+  background: var(--vl-surface);
+}
+.sb-biz-frame--small {
+  max-inline-size: 360px;
+}
+.sb-biz-frame--card {
+  max-inline-size: 720px;
+}
+.sb-biz-frame--wide {
+  max-inline-size: 1200px;
+}
+.sb-biz-row {
+  flex-wrap: wrap;
+  align-items: flex-start;
+  display: flex;
+  gap: 8px;
+  margin-block-end: 12px;
+  font: 13px var(--vl-font-family);
+  color: var(--vl-text-secondary);
+}

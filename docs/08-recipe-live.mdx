@@ -1,0 +1,28 @@
+import { Meta, Canvas } from '@storybook/blocks';
+import * as Recipes from '../stories/recipes/recipes.stories';
+
+<Meta title="Recipes/Live data" />
+
+# Live data
+
+Live mode is not a polling helper — it is a rendering contract. Push new data however you like
+(WebSocket, SSE, polling) and the components animate the difference:
+
+- **`LiveNumber`** and **`Kpi`** tween to the new value and show a short `+N` bump.
+- **`TimeSeriesChart live`** slides new buckets in and keeps the window pinned to "now" until the user pans away.
+  Panning back to the right edge resumes following.
+- **`Pulse`** / table cell pulses mark what changed, at most a handful at a time, so a burst does not flash the
+  whole screen.
+- **`LiveIndicator`** shows "updated N s ago" and turns muted when updates stop.
+
+All animations respect `prefers-reduced-motion` and `VizProvider animate={false}`.
+
+```tsx
+const [sold, setSold] = useState(initial);
+useEffect(() => socket.on('sale', (n) => setSold((s) => s + n)), []);
+
+<KpiStrip items={[{ id: 'sold', label: 'Tickets sold', value: sold, unit: UNIT_COUNT }]} />
+<TimeSeriesChart title="Sales" series={series} source={source} metric="tickets" live />
+```
+
+<Canvas of={Recipes.LiveData} />

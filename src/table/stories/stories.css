@@ -1,0 +1,85 @@
+/* Layout helpers of the table stories only; not part of the package. */
+
+.sbt-stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--vl-space-6);
+}
+
+.sbt-block {
+  display: flex;
+  flex-direction: column;
+  gap: var(--vl-space-2);
+}
+
+.sbt-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--vl-space-2);
+}
+
+.sbt-title {
+  margin: 0;
+  font-size: var(--vl-font-size-l);
+  font-weight: var(--vl-font-weight-semibold);
+}
+
+.sbt-note {
+  margin: 0;
+  color: var(--vl-text-secondary);
+  font-size: var(--vl-font-size-s);
+}
+
+.sbt-detail {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+  gap: var(--vl-space-3);
+  margin: 0;
+}
+
+.sbt-detail dt {
+  color: var(--vl-text-muted);
+  font-size: var(--vl-font-size-xs);
+}
+
+.sbt-detail dd {
+  margin: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.sbt-card {
+  padding: var(--vl-space-4);
+  border: 1px solid var(--vl-border);
+  border-radius: var(--vl-radius-l);
+  background: var(--vl-surface);
+}
+
+/* Headless story: plain markup on top of useDataTable. */
+.sbt-plain {
+  inline-size: 100%;
+  border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
+}
+
+.sbt-plain th,
+.sbt-plain td {
+  padding: var(--vl-space-2) var(--vl-space-3);
+  border-block-end: 1px solid var(--vl-border);
+  text-align: start;
+}
+
+.sbt-plain th button {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  font-weight: var(--vl-font-weight-semibold);
+  cursor: pointer;
+}
+
+.sbt-plain [data-align='end'] {
+  text-align: end;
+}

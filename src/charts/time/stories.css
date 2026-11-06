@@ -1,0 +1,6 @@
+/* Story-only layout helpers. */
+.sb-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}

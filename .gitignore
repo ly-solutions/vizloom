@@ -1,0 +1,13 @@
+node_modules/
+dist/
+storybook-static/
+coverage/
+*.tgz
+*.log
+.DS_Store
+.vite/
+.worktrees/
+# Internal coordination notes of the build-out; only status files are tracked.
+.kit/*
+
+.pnpm-store/

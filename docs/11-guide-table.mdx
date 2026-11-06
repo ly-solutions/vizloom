@@ -1,0 +1,88 @@
+import { Meta, Canvas } from '@storybook/blocks';
+import * as Examples from '../src/table/stories/examples.stories';
+import * as Table from '../src/table/stories/table.stories';
+
+<Meta title="Guides/Data table" />
+
+# Data table
+
+`vizloom/table` has two layers:
+
+- **`useDataTable`** — the headless core. It takes columns and rows and gives back the prepared model
+  (filtered, sorted, grouped, paged rows, totals, extents for bars) plus actions (`toggleSort`, `setFilter`,
+  `setPin`, `toggleRow`, …). Use it with your own markup if you like.
+- **`DataTable`** and **`DataTableToolbar`** — the ready UI on top of it.
+
+Styles: `vizloom/table.css` (sparkline cells also need `charts.css`), or simply `vizloom/styles.css`.
+
+```tsx
+import { DataTable, DataTableToolbar, defineColumns, useDataTable } from 'vizloom/table';
+
+const columns = defineColumns<Order>([
+  { id: 'number', title: 'Order', type: 'text', value: (o) => o.number, pin: 'start' },
+  { id: 'amount', title: 'Amount', type: 'money', value: (o) => o.amount, total: 'sum' },
+  { id: 'status', title: 'Status', type: 'status', value: (o) => o.status, options: STATUSES },
+  { id: 'createdAt', title: 'Created', type: 'datetime', value: (o) => o.createdAt },
+]);
+
+function Orders({ rows }: { rows: Order[] }) {
+  const table = useDataTable({ columns, rows, rowKey: (o) => o.id, selectable: true, pagination: 'pages' });
+  return (
+    <>
+      <DataTableToolbar table={table} search filters settings />
+      <DataTable table={table} label="Orders" maxHeight={560} mobileLayout="cards" />
+    </>
+  );
+}
+```
+
+## Columns
+
+A column's `type` sets the defaults: alignment, width, first sort direction, filter kind and how the phone
+card uses it. `text`, `number`, `money`, `percent` (0–100), `date`, `datetime`, `status`.
+
+- `value` returns the raw value; `null` is "unknown" and renders as a dash with `unknownReason` on hover.
+- `render(row, { value, formatted, share, best })` draws a custom cell. Ready cells: `StatusCell`, `DeltaCell`,
+  `BarCell`, `ProgressCell`, `SparklineCell`, `AvatarCell`, `TwoLineCell`, `DotCell`, `PillCell`, `LinkCell`, `UnknownCell`.
+- `total` (`sum`, `avg`, `min`, `max`, `count`) adds the column to the totals row and to group rows.
+  A total is unknown when any of its values is unknown — the table never shows a partial sum as the whole.
+- `pin`, `width`, `minWidth`, `hidden`, `hideable`, `sortable`, `filter`, `searchable`, `bar`, `highlight`, `description`.
+- `card` (`title`, `value`, `meta`, `badge`, `hidden`) places the column in the phone card.
+
+## Data modes
+
+- **Client** (default): give all rows; the table filters, sorts, groups and pages them. 50 000 rows stay
+  smooth with `maxHeight` (rows are virtualized from 120 items).
+- **Server**: `mode: 'server'`, `rowCount`, and `onStateChange` — the table reports filters, search, sort and
+  page; you fetch and pass the prepared rows back. Pass `loading` while a request runs.
+
+## States
+
+`loading`, `error` (with `onRetry`), `refreshError` (keeps the old rows), `noAccess`, `empty` — or one
+`state: BlockState` from `vizloom/core`. "Nothing found" after filtering offers to reset the filters.
+
+## Phones
+
+Below `mobileBelow` (640 px of the table's own width) the table turns into cards (`mobileLayout="cards"`) or
+keeps scrolling sideways with only the first column pinned, at most 45 % wide (`"scroll"`). Popovers become
+bottom sheets; `rowDetails` opens a row as a sheet.
+
+## Live updates
+
+Pass new `rows` with the same keys and `pulseChanges`: changed cells flash for 1.6 s with the change
+(`+3`), at most 14 at once. With `prefers-reduced-motion` they get a quiet tint instead.
+
+## Keyboard and screen readers
+
+The table is an ARIA `grid` with one tab stop. Arrows move between cells, `Home`/`End` (with `Ctrl` — to the
+corners), `PageUp`/`PageDown` by ten rows, `Enter` sorts in the header or opens the row, `F2` enters a cell's
+control and `Escape` leaves it, `Space` selects the row or toggles a group. Column edges resize with arrow keys
+(`Shift` for big steps). Sort state is announced through `aria-sort`.
+
+## Settings
+
+With `storageKey`, column order, widths, visibility, pins, sort, density and grouping persist in
+`localStorage` (or your own `storage`). Stored settings are versioned and dropped when the columns change.
+
+<Canvas of={Examples.Orders} />
+<Canvas of={Table.Live} />

@@ -1,0 +1,6 @@
+dist
+storybook-static
+pnpm-lock.yaml
+.kit
+coverage
+.pnpm-store

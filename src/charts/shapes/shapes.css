@@ -1,0 +1,582 @@
+/* Shapes charts: donut / pie / semi, funnel, heatmap. Colours come from --vl-* tokens only. */
+
+/* ---------- Donut ---------- */
+.vl-donut {
+  --vl-donut-size: 200px;
+  container-type: inline-size;
+  position: relative;
+  inline-size: 100%;
+  font-family: var(--vl-font-family);
+  color: var(--vl-text);
+}
+.vl-donut__body {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, var(--vl-donut-size)) minmax(0, 1fr);
+  align-items: center;
+  gap: var(--vl-space-6);
+}
+.vl-donut__plot {
+  inline-size: 100%;
+  max-inline-size: var(--vl-donut-size);
+  justify-self: center;
+}
+.vl-donut__svg {
+  display: block;
+  inline-size: 100%;
+  block-size: auto;
+  overflow: visible;
+}
+.vl-donut__track {
+  fill: none;
+  stroke: var(--vl-surface-sunken);
+  stroke-width: 24px;
+}
+.vl-donut__slice {
+  cursor: default;
+  outline: none;
+  transform-origin: 100px 100px;
+  transition:
+    opacity var(--vl-duration-base) var(--vl-ease-out),
+    transform var(--vl-duration-base) var(--vl-ease-out),
+    filter var(--vl-duration-base) var(--vl-ease-out);
+}
+.vl-donut__slice[data-state='on'] {
+  transform: scale(1.035);
+}
+.vl-donut__slice[data-state='dim'] {
+  opacity: 0.4;
+}
+.vl-donut__slice:focus-visible {
+  stroke: var(--vl-text);
+  stroke-width: 2px;
+}
+.vl-donut__center {
+  animation: vl-donut-swap var(--vl-duration-base) var(--vl-ease-out);
+  pointer-events: none;
+}
+.vl-donut__big {
+  fill: var(--vl-text);
+  font-size: 26px;
+  font-weight: var(--vl-font-weight-semibold);
+  font-variant-numeric: tabular-nums;
+}
+.vl-donut__caption {
+  fill: var(--vl-text-muted);
+  font-size: 12px;
+}
+@keyframes vl-donut-swap {
+  from {
+    opacity: 0;
+    transform: translateY(3px);
+  }
+}
+.vl-donut__legend {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  min-inline-size: 0;
+}
+.vl-donut__row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  align-items: baseline;
+  gap: var(--vl-space-3);
+  padding: 6px var(--vl-space-2);
+  border-radius: var(--vl-radius-s);
+  font-size: var(--vl-font-size-m);
+  transition:
+    background-color var(--vl-duration-fast) var(--vl-ease-out),
+    opacity var(--vl-duration-base) var(--vl-ease-out);
+}
+.vl-donut__row[data-state='on'] {
+  background: var(--vl-surface-hover);
+}
+.vl-donut__row[data-state='dim'] {
+  opacity: 0.55;
+}
+.vl-donut__row[data-empty] {
+  color: var(--vl-text-muted);
+}
+.vl-donut__label {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--vl-space-2);
+  min-inline-size: 0;
+}
+.vl-donut__name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.vl-donut__share {
+  min-inline-size: 3.5ch;
+  color: var(--vl-text-muted);
+  font-size: var(--vl-font-size-s);
+  text-align: end;
+  font-variant-numeric: tabular-nums;
+}
+.vl-donut__value {
+  min-inline-size: 5ch;
+  font-weight: var(--vl-font-weight-semibold);
+  text-align: end;
+  font-variant-numeric: tabular-nums;
+}
+.vl-donut--semi .vl-donut__big {
+  font-size: 28px;
+}
+/* Narrow card (or a phone): the legend goes under the drawing. */
+@container (max-inline-size: 360px) {
+  .vl-donut__body {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--vl-space-4);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .vl-donut__slice,
+  .vl-donut__row {
+    transition: none;
+  }
+  .vl-donut__center {
+    animation: none;
+  }
+}
+
+/* ---------- Funnel ---------- */
+.vl-funnel {
+  container-type: inline-size;
+  position: relative;
+  inline-size: 100%;
+  font-family: var(--vl-font-family);
+  color: var(--vl-text);
+}
+.vl-funnel__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--vl-space-4);
+}
+.vl-funnel__summary {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.vl-funnel__headline {
+  display: flex;
+  align-items: baseline;
+  gap: var(--vl-space-2);
+  font-size: var(--vl-font-size-m);
+  color: var(--vl-text-secondary);
+}
+.vl-funnel__total {
+  color: var(--vl-text);
+  font-size: var(--vl-font-size-kpi);
+  font-weight: var(--vl-font-weight-semibold);
+  font-variant-numeric: tabular-nums;
+  line-height: 1.1;
+}
+.vl-funnel__of {
+  color: var(--vl-text-muted);
+  font-variant-numeric: tabular-nums;
+}
+.vl-funnel__worst {
+  color: var(--vl-negative);
+  font-size: var(--vl-font-size-s);
+}
+.vl-funnel__plot {
+  position: relative;
+  min-inline-size: 0;
+}
+.vl-funnel__rows {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.vl-funnel__step {
+  display: grid;
+  grid-template-columns: minmax(80px, 150px) minmax(0, 1fr) minmax(96px, 128px);
+  align-items: center;
+  gap: var(--vl-space-3);
+  block-size: 52px;
+  border-radius: var(--vl-radius-s);
+  outline: none;
+  transition:
+    opacity var(--vl-duration-base) var(--vl-ease-out),
+    background-color var(--vl-duration-fast) var(--vl-ease-out);
+}
+.vl-funnel__step[data-state='dim'],
+.vl-funnel__svg-step[data-state='dim'] {
+  opacity: 0.45;
+}
+.vl-funnel__step:focus-visible {
+  box-shadow: var(--vl-focus-ring);
+}
+.vl-funnel__name {
+  overflow: hidden;
+  font-size: var(--vl-font-size-m);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.vl-funnel__graphic {
+  position: relative;
+  display: block;
+  block-size: 100%;
+}
+.vl-funnel__shape {
+  position: absolute;
+  inset: 0;
+  background: var(--vl-step-color);
+  clip-path: polygon(
+    calc(50% - var(--vl-a) / 2) 0,
+    calc(50% + var(--vl-a) / 2) 0,
+    calc(50% + var(--vl-b) / 2) 100%,
+    calc(50% - var(--vl-b) / 2) 100%
+  );
+}
+.vl-funnel__rows--dropoff .vl-funnel__graphic {
+  inset-block: 0;
+  margin-block: 14px;
+  block-size: 24px;
+  border-radius: var(--vl-radius-s);
+  background: var(--vl-surface-sunken);
+  overflow: hidden;
+}
+.vl-funnel__reached,
+.vl-funnel__lost {
+  position: absolute;
+  inset-block: 0;
+  inline-size: var(--vl-w);
+}
+.vl-funnel__reached {
+  inset-inline-start: 0;
+  background: var(--vl-step-color);
+  border-radius: var(--vl-radius-s);
+}
+.vl-funnel__lost {
+  inset-inline-start: var(--vl-x);
+  background: repeating-linear-gradient(135deg, var(--vl-negative-soft) 0 4px, transparent 4px 8px);
+  border-inline-start: 1px dashed var(--vl-negative);
+}
+.vl-funnel__nums {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 1px;
+  font-size: var(--vl-font-size-s);
+  line-height: 1.25;
+  font-variant-numeric: tabular-nums;
+}
+.vl-funnel__nums--muted {
+  justify-self: end;
+  color: var(--vl-text-muted);
+  font-size: var(--vl-font-size-s);
+}
+.vl-funnel__value {
+  font-size: var(--vl-font-size-m);
+  font-weight: var(--vl-font-weight-semibold);
+}
+.vl-funnel__sub {
+  color: var(--vl-text-muted);
+}
+.vl-funnel__step-conv {
+  color: var(--vl-text-secondary);
+}
+.vl-funnel__step-conv[data-worst] {
+  padding-inline: 6px;
+  border-radius: var(--vl-radius-pill);
+  background: var(--vl-negative-soft);
+  color: var(--vl-negative);
+  font-weight: var(--vl-font-weight-medium);
+}
+.vl-funnel__step-conv[data-skipped] {
+  color: var(--vl-text-muted);
+  font-style: italic;
+}
+/* Narrow card: the name sits above the band, numbers in a line on the right. */
+@container (max-inline-size: 420px) {
+  .vl-funnel__step {
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas:
+      'name nums'
+      'graphic nums';
+    row-gap: 2px;
+    block-size: 60px;
+  }
+  .vl-funnel__name {
+    grid-area: name;
+    align-self: end;
+    font-size: var(--vl-font-size-s);
+  }
+  .vl-funnel__graphic {
+    grid-area: graphic;
+  }
+  .vl-funnel__nums {
+    grid-area: nums;
+  }
+}
+/* SVG variants */
+.vl-funnel__scroll {
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+}
+.vl-funnel__svg {
+  display: block;
+  max-inline-size: none;
+}
+.vl-funnel__axis {
+  stroke: var(--vl-axis);
+}
+.vl-funnel__svg-step {
+  cursor: default;
+  outline: none;
+  transition: opacity var(--vl-duration-base) var(--vl-ease-out);
+}
+.vl-funnel__svg-step:focus-visible .vl-funnel__column {
+  stroke: var(--vl-text);
+  stroke-width: 2px;
+}
+.vl-funnel__hit {
+  fill: transparent;
+}
+.vl-funnel__wedge {
+  opacity: 0.16;
+}
+.vl-funnel__wedge[data-worst] {
+  opacity: 0.28;
+}
+.vl-funnel__ribbon {
+  opacity: 0.32;
+}
+.vl-funnel__lost-ribbon {
+  fill: var(--vl-negative);
+  opacity: 0.16;
+}
+.vl-funnel__lost-ribbon[data-worst] {
+  opacity: 0.34;
+}
+.vl-funnel__pill {
+  fill: var(--vl-text-secondary);
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+}
+.vl-funnel__pill[data-worst] {
+  fill: var(--vl-negative);
+  font-weight: var(--vl-font-weight-semibold);
+}
+.vl-funnel__svg-value {
+  fill: var(--vl-text);
+  font-size: 12px;
+  font-weight: var(--vl-font-weight-semibold);
+  font-variant-numeric: tabular-nums;
+}
+.vl-funnel__svg-name {
+  fill: var(--vl-text);
+  font-size: 12px;
+}
+.vl-funnel__svg-sub {
+  fill: var(--vl-text-muted);
+  font-size: 11px;
+}
+.vl-funnel__skeleton {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--vl-space-2);
+  padding: var(--vl-space-4);
+}
+.vl-funnel__skeleton-bar {
+  inline-size: var(--vl-w);
+  block-size: 30px;
+}
+.vl-funnel__skeleton-bar > .vl-skeleton {
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+}
+@media (prefers-reduced-motion: reduce) {
+  .vl-funnel__step,
+  .vl-funnel__svg-step {
+    transition: none;
+  }
+}
+
+/* ---------- Heatmap ---------- */
+.vl-heatmap {
+  container-type: inline-size;
+  position: relative;
+  inline-size: 100%;
+  font-family: var(--vl-font-family);
+  color: var(--vl-text);
+}
+.vl-heatmap__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--vl-space-3);
+}
+.vl-heatmap__summary {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.vl-heatmap__peak {
+  font-size: var(--vl-font-size-l);
+  font-weight: var(--vl-font-weight-semibold);
+  font-variant-numeric: tabular-nums;
+}
+.vl-heatmap__best {
+  color: var(--vl-text-secondary);
+  font-size: var(--vl-font-size-s);
+}
+.vl-heatmap__plot-box {
+  position: relative;
+  min-inline-size: 0;
+}
+.vl-heatmap__plot {
+  --vl-heat-row: 28px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--vl-space-2);
+}
+.vl-heatmap__grid {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.vl-heatmap__hours,
+.vl-heatmap__col-totals {
+  display: grid;
+  grid-template-columns: repeat(var(--vl-heat-cols), minmax(0, 1fr));
+  gap: 2px;
+  margin-inline: var(--vl-heat-day-w) var(--vl-heat-total-w);
+}
+.vl-heatmap__hour {
+  overflow: visible;
+  color: var(--vl-text-muted);
+  font-size: var(--vl-font-size-xs);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  transition: color var(--vl-duration-fast) var(--vl-ease-out);
+}
+.vl-heatmap__hour[data-on] {
+  color: var(--vl-text);
+  font-weight: var(--vl-font-weight-semibold);
+}
+.vl-heatmap__row {
+  display: grid;
+  grid-template-columns: var(--vl-heat-day-w) minmax(0, 1fr) var(--vl-heat-total-w);
+  align-items: center;
+}
+.vl-heatmap__day {
+  color: var(--vl-text-muted);
+  font-size: var(--vl-font-size-s);
+  transition: color var(--vl-duration-fast) var(--vl-ease-out);
+}
+.vl-heatmap__day[data-on] {
+  color: var(--vl-text);
+  font-weight: var(--vl-font-weight-semibold);
+}
+.vl-heatmap__cells {
+  display: grid;
+  grid-template-columns: repeat(var(--vl-heat-cols), minmax(0, 1fr));
+  gap: 2px;
+}
+.vl-heatmap__cell {
+  position: relative;
+  block-size: var(--vl-heat-row);
+  border-radius: 4px;
+  background: color-mix(in srgb, var(--vl-seq-to) calc(var(--vl-t, 0) * 100%), var(--vl-seq-from));
+  outline: none;
+  cursor: default;
+}
+.vl-heatmap__cell[data-zero] {
+  background: var(--vl-seq-from);
+  opacity: 0.7;
+}
+.vl-heatmap__cell[data-known='false'] {
+  background: repeating-linear-gradient(135deg, var(--vl-surface-sunken) 0 3px, transparent 3px 6px);
+  box-shadow: inset 0 0 0 1px var(--vl-border);
+}
+.vl-heatmap__cell[data-active] {
+  box-shadow: 0 0 0 2px var(--vl-text);
+  z-index: 1;
+}
+.vl-heatmap__cell:focus-visible {
+  box-shadow: var(--vl-focus-ring);
+  z-index: 1;
+}
+.vl-heatmap__cell[data-hot]::after {
+  content: '';
+  position: absolute;
+  inset-block-start: 3px;
+  inset-inline-end: 3px;
+  inline-size: 5px;
+  block-size: 5px;
+  border-radius: 50%;
+  background: var(--vl-text-inverse);
+}
+.vl-heatmap__total {
+  padding-inline-start: var(--vl-space-2);
+  color: var(--vl-text-secondary);
+  font-size: var(--vl-font-size-s);
+  text-align: end;
+  font-variant-numeric: tabular-nums;
+}
+.vl-heatmap__col-totals {
+  align-items: end;
+  block-size: 28px;
+  margin-block-start: var(--vl-space-1);
+}
+.vl-heatmap__col-total {
+  block-size: max(2px, calc(var(--vl-h, 0) * 100%));
+  border-radius: 2px;
+  background: var(--vl-border-strong);
+  transition: background-color var(--vl-duration-fast) var(--vl-ease-out);
+}
+.vl-heatmap__col-total[data-on] {
+  background: var(--vl-accent);
+}
+.vl-heatmap__scale {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--vl-space-2);
+  color: var(--vl-text-muted);
+  font-size: var(--vl-font-size-xs);
+}
+.vl-heatmap__ramp {
+  inline-size: 84px;
+  block-size: 8px;
+  border-radius: var(--vl-radius-pill);
+  background: linear-gradient(90deg, color-mix(in srgb, var(--vl-seq-to) 14%, var(--vl-seq-from)), var(--vl-seq-to));
+}
+.vl-heatmap__skeleton {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 2px;
+}
+.vl-heatmap__skeleton > .vl-skeleton {
+  display: block;
+  block-size: 28px;
+  border-radius: 4px;
+}
+@container (max-inline-size: 420px) {
+  .vl-heatmap__plot {
+    --vl-heat-row: 24px;
+  }
+  .vl-heatmap__total {
+    font-size: var(--vl-font-size-xs);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .vl-heatmap__hour,
+  .vl-heatmap__day,
+  .vl-heatmap__col-total {
+    transition: none;
+  }
+}

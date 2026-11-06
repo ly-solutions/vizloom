@@ -1,0 +1,34 @@
+import { Meta, Canvas } from '@storybook/blocks';
+import * as Recipes from '../stories/recipes/recipes.stories';
+
+<Meta title="Recipes/Comparison" />
+
+# Comparison
+
+"Are we selling faster than last time?" needs series from different periods on one axis.
+Pass them as `compare` instead of `series`:
+
+```tsx
+<TimeSeriesChart
+  title="Pace against past events"
+  series={[]}
+  kind="line"
+  compareAlign="days-before" // or "date"
+  compare={[
+    { id: 'now', label: 'This concert', role: 'primary', event: eventAt, frame: thisFrame },
+    { id: 'spring', label: 'Spring show', role: 'compare', event: springAt, frame: springFrame },
+  ]}
+/>
+```
+
+- **`days-before`** aligns every series on its own event moment: the X axis reads "30 days before … event day".
+  Use it to compare events held at different times.
+- **`date`** keeps calendar dates — for "this October vs last October".
+- The primary series is solid in the main palette; comparisons are dashed in the separate `--vl-compare-*`
+  ramp, so they never look like another ticket type.
+- The tooltip lists every series at the hovered position.
+
+For KPIs, `alignComparison`, `cumulative` and `valuesAt` from `vizloom/dashboard` give the same numbers without a
+chart ("142 more tickets than the spring show at this point").
+
+<Canvas of={Recipes.Compare} />

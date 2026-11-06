@@ -1,0 +1,74 @@
+import { Meta } from '@storybook/blocks';
+
+<Meta title="Getting started" />
+
+# Getting started
+
+## Install
+
+```bash
+npm install vizloom
+# or
+pnpm add vizloom
+```
+
+React 18.2+ or 19 is a peer dependency. No other runtime dependencies.
+
+## Import the styles once
+
+```tsx
+import 'vizloom/styles.css'; // everything
+// or only what you use:
+import 'vizloom/core.css';
+import 'vizloom/charts.css';
+import 'vizloom/dashboard.css';
+```
+
+The JavaScript never imports CSS, so the package works in any bundler and on the server.
+
+## First dashboard
+
+```tsx
+import { VizProvider, currencyUnit, UNIT_COUNT } from 'vizloom/core';
+import { DashboardGrid, KpiStrip, ChartCard } from 'vizloom/dashboard';
+
+export function Overview() {
+  return (
+    <VizProvider locale="en">
+      <DashboardGrid>
+        <KpiStrip
+          items={[
+            { id: 'rev', label: 'Revenue', value: 117763, unit: currencyUnit('USD'), delta: 9, sub: 'after refunds' },
+            { id: 'sold', label: 'Tickets sold', value: 2874, unit: UNIT_COUNT, delta: 18 },
+          ]}
+        />
+        <ChartCard title="Sales by day" span={8} info="Tickets sold per day">
+          {/* any chart from vizloom/charts */}
+        </ChartCard>
+      </DashboardGrid>
+    </VizProvider>
+  );
+}
+```
+
+## Locale and time zone
+
+```tsx
+import { VizProvider, intlZone, defineLocale, en } from 'vizloom/core';
+
+<VizProvider locale="ru" zone={intlZone('Europe/Moscow')}>…</VizProvider>
+<VizProvider locale={defineLocale(en, { code: 'en-GB', dayFirst: true })}>…</VizProvider>
+```
+
+Without a provider components use English and UTC.
+
+## Server rendering
+
+All components render on the server: sizes start at zero and canvases draw after hydration;
+no `window` access during render. Tooltips are positioned inside the chart container, so no
+portal root is needed.
+
+## Subpath imports and tree-shaking
+
+Import from the narrowest subpath — `vizloom/charts`, `vizloom/table` — and unused components
+are dropped by any ESM bundler (`sideEffects` is limited to CSS files).

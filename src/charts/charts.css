@@ -1,0 +1,5 @@
+/* vizloom/charts styles. Each group owns its partial; scripts/build-css.mjs resolves the imports. */
+@import './time/time.css';
+@import './shapes/shapes.css';
+@import './business/business.css';
+@import './category/category.css';

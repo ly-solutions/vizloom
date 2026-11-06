@@ -1,0 +1,20 @@
+import { Meta } from '@storybook/blocks';
+
+<Meta title="Guides/Accessibility" />
+
+# Accessibility
+
+- **Screen readers.** Every drawing is `aria-hidden` and paired with a `ChartDataTable` — a real
+  table with a caption (the chart title). Dense series are capped with a summary.
+- **Keyboard.** Charts are focusable: arrow keys move between buckets/data points, `Home`/`End`
+  jump, `+`/`−` zoom, `Escape` unpins a tooltip. Legend items are toggle buttons
+  (`aria-pressed`); `Alt+Enter` keeps only one series. Segmented controls are radio groups, tabs
+  are tab lists with roving focus. Tables are ARIA grids with cell navigation.
+- **Not colour alone.** Deltas carry an arrow and a sign; hidden legend items are struck through;
+  comparison series are dashed.
+- **Motion.** `prefers-reduced-motion` turns off transitions, count-ups, pulses and viewport
+  easing; `<VizProvider animate={false}>` does the same globally.
+- **Contrast.** Text tokens meet WCAG AA on their surfaces in both themes; `contrastRatio`
+  checks custom palettes.
+- **Touch targets** grow to 36–40 px on coarse pointers.
+- **Live regions.** Tooltips announce politely; `LiveNumber announce` is opt-in to avoid noise.

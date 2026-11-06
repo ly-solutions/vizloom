@@ -1,0 +1,53 @@
+import { Meta } from '@storybook/blocks';
+
+<Meta title="Guides/Architecture" />
+
+# Architecture
+
+One package, four subpaths, dependencies pointing down only:
+
+```
+vizloom/dashboard ─┐
+vizloom/charts ────┼──► vizloom/core
+vizloom/table ─────┘
+```
+
+## Core layers
+
+- **model** — pure functions and classes, no React: time (UTC ms + `TimeZone`), granularity with
+  hysteresis, scales, formatting, palettes, aggregation (prefix sums), `Viewport`, LOD.
+- **data** — the tile source contract and `useTileData`.
+- **motion / gestures / positioning** — framework-free and unit-tested.
+- **theme / hooks** — `VizProvider`, CSS variables → canvas colours, element size, viewport, series state.
+- **ui** — shared components: legend, tooltip, crosshair, delta badge, live number, skeletons, states.
+- **contracts** — the public prop types of charts and tables.
+
+## Tile data source
+
+```ts
+interface TileSource<Id, Metric> {
+  extent: { start: number; end: number; now?: number; event?: number };
+  load(request: {
+    metric: Metric;
+    granularity: 'hour' | 'day' | 'week';
+    range: { start: number; end: number };
+    signal?: AbortSignal;
+  }): Promise<{ start: number; step: number; length: number; values: Record<Id, ArrayLike<number>> }>;
+}
+```
+
+`useTileData(source, { metric, granularity, range })` asks only when the cached frame does not
+cover the window (plus overscan), aborts stale requests, debounces while the window moves and
+keeps the previous frame on screen so the chart morphs into the new one. `createLocalSource`
+aggregates client-side hourly data into any granularity.
+
+## Viewport
+
+`Viewport` is the single time window shared by a chart, its navigator, markers and zoom buttons.
+It eases the centre and the logarithm of the width, so zooming feels the same at any scale.
+Wheel, trackpad pinch, two-finger pinch and buttons all call `zoomAround(anchor, factor)`;
+drags call `panBy`.
+
+## Decisions
+
+The full list of decisions with reasons lives in `docs/ARCHITECTURE.md` in the repository.

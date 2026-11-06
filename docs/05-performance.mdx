@@ -1,0 +1,23 @@
+import { Meta } from '@storybook/blocks';
+
+<Meta title="Guides/Performance" />
+
+# Performance
+
+- **Canvas for dense data.** Time series, navigators and heatmaps draw on a canvas sized for the
+  device pixel ratio (capped at 2 to save memory on phones).
+- **Level of detail.** `minMaxIndices` keeps the first, min, max and last point of every pixel
+  column, so 100 000 points draw as ~4 per pixel and peaks never disappear. `lttbIndices` is
+  available for smooth line shapes.
+- **One frame, one redraw.** Pointer moves, live ticks and resizes are coalesced with
+  `rafThrottle`; hover state lives in refs, not React state, so moving the mouse does not
+  re-render the tree.
+- **Prefix sums.** Aggregating hours into days or weeks and summing any window is O(1) per bucket.
+- **Tiles.** With a `TileSource` only the visible window (plus overscan) at the needed
+  granularity is loaded; stale requests are aborted.
+- **No layout thrash.** Sizes come from `ResizeObserver`; tooltips and crosshairs move through CSS
+  variables and `transform`.
+- **Small bundles.** Subpath imports, no runtime dependencies, CSS shipped separately.
+
+Open **Charts → Performance** stories to see tens of thousands of points pan and zoom at 60 fps
+(an FPS meter is shown in the story).

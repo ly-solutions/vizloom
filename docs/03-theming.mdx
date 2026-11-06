@@ -1,0 +1,70 @@
+import { Meta } from '@storybook/blocks';
+
+<Meta title="Guides/Theming" />
+
+# Theming
+
+Every colour, radius, font, shadow and duration is a CSS custom property prefixed `--vl-`.
+A theme is a block of overrides; canvases read the same variables at their element and redraw
+when a theme attribute changes.
+
+## Light, dark, auto
+
+```html
+<html data-vl-theme="dark">
+  <!-- whole page dark -->
+  <section data-vl-theme="light">
+    <!-- a light island inside -->
+    <body data-vl-theme="auto">
+      <!-- follow the OS -->
+    </body>
+  </section>
+</html>
+```
+
+## Brand palette
+
+```css
+:root {
+  --vl-accent: #0e7c66;
+  --vl-cat-1: #0e7c66;
+  --vl-cat-2: #e0912f;
+  --vl-cat-3: #3c6fd8;
+  --vl-font-family: 'Manrope', system-ui, sans-serif;
+  --vl-radius-l: 8px;
+}
+[data-vl-theme='dark'] {
+  --vl-accent: #34c3a3;
+  --vl-cat-1: #34c3a3;
+}
+```
+
+## Token groups
+
+| Group    | Variables                                                                                            |
+| -------- | ---------------------------------------------------------------------------------------------------- |
+| Surfaces | `--vl-bg`, `--vl-surface`, `--vl-surface-raised`, `--vl-surface-sunken`, `--vl-surface-hover`        |
+| Text     | `--vl-text`, `--vl-text-secondary`, `--vl-text-muted`                                                |
+| Lines    | `--vl-border`, `--vl-border-strong`, `--vl-grid`, `--vl-axis`, `--vl-crosshair`                      |
+| Tones    | `--vl-accent`, `--vl-positive`, `--vl-negative`, `--vl-warning` and their `-soft` backgrounds        |
+| Series   | `--vl-cat-1` … `--vl-cat-8`, `--vl-cat-other`, `--vl-compare-1` … `--vl-compare-4`                   |
+| Ramps    | `--vl-seq-from`, `--vl-seq-to`, `--vl-div-neg`, `--vl-div-mid`, `--vl-div-pos`                       |
+| Shape    | `--vl-radius-s/m/l/pill`, `--vl-space-1…6`, `--vl-shadow-card`, `--vl-shadow-pop`, `--vl-focus-ring` |
+| Type     | `--vl-font-family`, `--vl-font-mono`, `--vl-font-size-xs…kpi`, weights                               |
+| Motion   | `--vl-duration-fast/base/slow`, `--vl-ease`, `--vl-ease-out`                                         |
+
+## Series colours in code
+
+```ts
+import { seriesColor, compareColor } from 'vizloom/core';
+seriesColor(0); // 'var(--vl-cat-1)'
+compareColor(0); // 'var(--vl-compare-1)'
+```
+
+A series can also take any CSS colour: `{ id: 'vip', label: 'VIP', color: 'var(--brand)' }`.
+
+## Contrast
+
+`contrastRatio`, `readableOn`, `mixColors`, `sequentialRamp` and `divergingRamp` help build
+accessible palettes; the built-in categorical palette is checked for colour-blind readers on
+both themes (see **Core / Palette and tokens**).

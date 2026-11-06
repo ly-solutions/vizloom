@@ -1,0 +1,73 @@
+import { Meta } from '@storybook/blocks';
+
+<Meta title="Charts/Time/Guide" />
+
+# Time series charts
+
+`TimeSeriesChart` draws dense time series on canvas: smooth areas, lines, stacked and percent areas, and columns over
+time. It comes with a legend, zoom buttons and a whole-period navigator, and it keeps 60 fps on thousands of points.
+
+```tsx
+import { AreaChart, LineChart, StackedAreaChart, TimeColumnChart } from 'vizloom/charts';
+import 'vizloom/charts.css';
+
+<AreaChart
+  title="Tickets sold"
+  series={[
+    { id: 'web', label: 'Website' },
+    { id: 'app', label: 'App' },
+  ]}
+  frame={frame}
+/>;
+```
+
+## Data
+
+- **`frame`** — ready buckets: `{ start, step, length, values: { [seriesId]: ArrayLike<number> } }`. `NaN` is a gap
+  (no data), `0` means "nothing happened".
+- **`source`** + **`metric`** — a tile source (`createLocalSource` or your own `load(request)`). Zooming in asks for
+  finer buckets (day → hour), stale requests are aborted, the old frame morphs into the new one. While a finer frame
+  loads a thin line runs on top; if it fails the current frame stays and a banner offers a retry.
+
+## Kinds
+
+| Prop                       | Values                                                    |
+| -------------------------- | --------------------------------------------------------- |
+| `kind`                     | `area` (default), `line`, `columns`                       |
+| `stack`                    | `overlay` (default), `stack`, `percent` — animated switch |
+| `curve`                    | `smooth` (monotone, no overshoot), `linear`, `step`       |
+| `points`                   | `auto` (when buckets get wide), `always`, `none`          |
+| `guides`                   | dashed horizontal lines: average, goal                    |
+| `zones` / `now`            | coloured periods; the future after "now" is dimmed        |
+| `markers` / `markerEffect` | event icons with a "before → after" card                  |
+
+## Interaction
+
+- **Mouse**: hover shows a tooltip that glides between buckets; click pins it; wheel zooms around the cursor
+  (Ctrl — faster); horizontal wheel or drag pans with inertia.
+- **Touch**: tap shows the tooltip, pinch zooms, horizontal drag pans, a vertical swipe scrolls the page. On phones
+  the series summary opens as a bottom sheet.
+- **Keyboard**: focus the chart, ← → move between buckets, Enter pins, + − zoom, Home (or 0) shows the whole period,
+  Escape closes. The navigator is a slider with the same keys.
+- **Legend**: click hides a series (the last one never hides), double-click solos it, hover focuses it.
+
+## Compare
+
+`compare` takes series with their own frames. `compareAlign="date"` keeps real dates; `"days-before"` puts every
+event at 0 so "30 days before" of different seasons stand one above another. Comparison series use the
+`--vl-compare-*` palette.
+
+## Live
+
+Set `live` and move `now`: when the window was at the right edge it follows. `liveEvents` add a pulse and a floating
+"+N" caption on a series at a moment.
+
+## Accessibility
+
+The canvas has `role="img"` with the title as its name, a screen-reader table of the visible window (up to 60 rows)
+and keyboard access to every bucket. Animations respect `prefers-reduced-motion`.
+
+## Theming
+
+Colours come from CSS variables (`--vl-cat-1…8`, `--vl-grid`, `--vl-text-*`, `--vl-zone`, `--vl-future`). The canvas
+re-reads them when `data-vl-theme` or a class changes on an ancestor. Any CSS colour works for `series[].color`.

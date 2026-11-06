@@ -1,0 +1,34 @@
+import { Meta } from '@storybook/blocks';
+
+<Meta title="Introduction" />
+
+# vizloom
+
+**React charts, data tables and dashboard blocks** — dense time series on canvas with zoom and
+touch gestures, a full data table, and the dashboard pieces around them (KPI strip, chart cards,
+a 12-column grid, block states, comparison mode). Themeable with CSS variables, SSR-safe,
+tree-shakeable, English and Russian out of the box.
+
+## What is inside
+
+| Subpath             | Contents                                                                                                                                                                                                                                                                                                                           |
+| ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `vizloom/core`      | Time and scales, formatting (numbers, money, percent, dates, relative time; `en`, `ru`), palettes and contrast, motion with reduced-motion, gestures (wheel, drag, pinch, long-press), tooltip placement, tile data source, legend, tooltip, crosshair, delta badge, live number, pulse, skeletons, block states, public contracts |
+| `vizloom/charts`    | Wave/area, line, stacked and column time series with navigator, zoom/pan and live updates; sales pace with "usual" band and forecast; refunds; flow with series focus; hour×day heatmap; funnel; donut/pie; gauge; bar list; horizontal/vertical/grouped/stacked bars; sparklines; split bar                                       |
+| `vizloom/table`     | Headless table core and `DataTable`: sticky header and columns, scroll shadows, sorting, grouping, expansion, selection, column settings, filters, virtualization, rich cells, totals, phone layout                                                                                                                                |
+| `vizloom/dashboard` | `KpiStrip`, `ChartCard`, `DashboardGrid`, `Segmented`, `Tabs`, `InfoHint` + `CalcCard`, `StatTile`, `InsightList`, `ActivityFeed`, `LiveIndicator`, comparison helpers                                                                                                                                                             |
+
+## Principles
+
+- **Fast by default.** Canvas for dense series, min/max level of detail so peaks survive any zoom,
+  one redraw per animation frame, no re-render on pointer move.
+- **Every block has five states**: loading (a skeleton in the block's shape), empty with a reason,
+  no access, partial, error with retry.
+- **Accessible**: keyboard everywhere, ARIA roles, a data table for screen readers next to every
+  drawing, meaning never carried by colour alone, `prefers-reduced-motion` respected.
+- **Themeable**: every colour is a `--vl-*` variable; light and dark ship built in.
+- **Phone-first interactions**: one-finger pan, pinch zoom, long-press scrub, tap to pin,
+  tooltips docked above the finger, container queries instead of window breakpoints.
+
+Use the toolbar above to switch **theme** (light/dark), **locale** (en/ru) and **viewport** (phone,
+tablet, desktop) for every story.

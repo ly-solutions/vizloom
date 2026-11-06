@@ -1,0 +1,191 @@
+/*
+ * Design tokens. Every colour, radius, font and duration the components use is a CSS variable,
+ * so a theme is a block of overrides. Light is the default; dark applies with
+ * `data-vl-theme="dark"` on any ancestor, or automatically under `data-vl-theme="auto"`
+ * when the OS prefers dark.
+ */
+:root,
+[data-vl-theme='light'] {
+  color-scheme: light;
+  --vl-font-family: Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --vl-font-mono: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+
+  --vl-bg: #f6f6f8;
+  --vl-surface: #ffffff;
+  --vl-surface-raised: #ffffff;
+  --vl-surface-sunken: #f1f1f4;
+  --vl-surface-hover: #f3f3f6;
+  --vl-text: #16161d;
+  --vl-text-secondary: #55555f;
+  --vl-text-muted: #7d7d88;
+  --vl-text-inverse: #ffffff;
+  --vl-border: #e3e3e9;
+  --vl-border-strong: #cfcfd8;
+  --vl-grid: #ececf1;
+  --vl-axis: #c9c9d2;
+  --vl-crosshair: #9a9aa6;
+  --vl-accent: #6a4cf0;
+  --vl-accent-soft: #efebfe;
+  --vl-accent-text: #5236d6;
+  --vl-positive: #0f8a4c;
+  --vl-positive-soft: #e3f5ea;
+  --vl-negative: #cf2f4c;
+  --vl-negative-soft: #fde8ec;
+  --vl-warning: #a86400;
+  --vl-warning-soft: #fdf1dc;
+  --vl-neutral-soft: #efeff3;
+  --vl-overlay: rgba(22, 22, 29, 0.04);
+  --vl-future: rgba(22, 22, 29, 0.035);
+  --vl-zone: rgba(22, 22, 29, 0.05);
+
+  /* Categorical palette: fixed order, distinguishable for colour-blind readers on both themes. */
+  --vl-cat-1: #764be5;
+  --vl-cat-2: #c57800;
+  --vl-cat-3: #009589;
+  --vl-cat-4: #d31d4b;
+  --vl-cat-5: #0072d0;
+  --vl-cat-6: #009b44;
+  --vl-cat-7: #b04ac2;
+  --vl-cat-8: #5f6b7a;
+  --vl-cat-other: #9a9aa4;
+  /* Comparison series (other events, previous period). */
+  --vl-compare-1: #8b8b97;
+  --vl-compare-2: #b28a4a;
+  --vl-compare-3: #4f9a92;
+  --vl-compare-4: #a5617b;
+  /* Sequential and diverging ramps (heatmaps). */
+  --vl-seq-from: #f1eefe;
+  --vl-seq-to: #4b2bd6;
+  --vl-div-neg: #cf2f4c;
+  --vl-div-mid: #f2f2f5;
+  --vl-div-pos: #0f8a4c;
+
+  --vl-radius-s: 6px;
+  --vl-radius-m: 10px;
+  --vl-radius-l: 14px;
+  --vl-radius-pill: 999px;
+  --vl-space-1: 4px;
+  --vl-space-2: 8px;
+  --vl-space-3: 12px;
+  --vl-space-4: 16px;
+  --vl-space-5: 20px;
+  --vl-space-6: 24px;
+  --vl-shadow-card: 0 1px 2px rgba(22, 22, 29, 0.04), 0 0 0 1px var(--vl-border);
+  --vl-shadow-pop: 0 8px 28px rgba(22, 22, 29, 0.14), 0 0 0 1px var(--vl-border);
+  --vl-focus-ring: 0 0 0 2px var(--vl-surface), 0 0 0 4px var(--vl-accent);
+
+  --vl-font-size-xs: 11px;
+  --vl-font-size-s: 12px;
+  --vl-font-size-m: 13px;
+  --vl-font-size-l: 15px;
+  --vl-font-size-xl: 20px;
+  --vl-font-size-kpi: 28px;
+  --vl-font-weight-medium: 500;
+  --vl-font-weight-semibold: 600;
+
+  --vl-duration-fast: 150ms;
+  --vl-duration-base: 250ms;
+  --vl-duration-slow: 450ms;
+  --vl-ease: cubic-bezier(0.2, 0, 0, 1);
+  --vl-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+[data-vl-theme='dark'] {
+  color-scheme: dark;
+  --vl-bg: #111114;
+  --vl-surface: #1a1a1f;
+  --vl-surface-raised: #222228;
+  --vl-surface-sunken: #141418;
+  --vl-surface-hover: #24242b;
+  --vl-text: #f2f2f5;
+  --vl-text-secondary: #b3b3bd;
+  --vl-text-muted: #8a8a95;
+  --vl-text-inverse: #111114;
+  --vl-border: #2c2c34;
+  --vl-border-strong: #3b3b45;
+  --vl-grid: #26262d;
+  --vl-axis: #3d3d47;
+  --vl-crosshair: #6f6f7b;
+  --vl-accent: #8f74ff;
+  --vl-accent-soft: #2a2347;
+  --vl-accent-text: #b4a3ff;
+  --vl-positive: #3cc47a;
+  --vl-positive-soft: #163626;
+  --vl-negative: #ff6680;
+  --vl-negative-soft: #3d1a22;
+  --vl-warning: #e8a33a;
+  --vl-warning-soft: #3a2b12;
+  --vl-neutral-soft: #26262d;
+  --vl-overlay: rgba(255, 255, 255, 0.04);
+  --vl-future: rgba(255, 255, 255, 0.03);
+  --vl-zone: rgba(255, 255, 255, 0.05);
+  --vl-cat-1: #8968f4;
+  --vl-cat-2: #d08f1e;
+  --vl-cat-3: #25a897;
+  --vl-cat-4: #e84461;
+  --vl-cat-5: #2389e2;
+  --vl-cat-6: #24ae56;
+  --vl-cat-7: #c46ad4;
+  --vl-cat-8: #8793a3;
+  --vl-cat-other: #7c7c86;
+  --vl-compare-1: #7d7d89;
+  --vl-compare-2: #a78452;
+  --vl-compare-3: #4c8f88;
+  --vl-compare-4: #9b6178;
+  --vl-seq-from: #221d38;
+  --vl-seq-to: #a38cff;
+  --vl-div-neg: #ff6680;
+  --vl-div-mid: #2a2a31;
+  --vl-div-pos: #3cc47a;
+  --vl-shadow-card: 0 0 0 1px var(--vl-border);
+  --vl-shadow-pop: 0 10px 32px rgba(0, 0, 0, 0.5), 0 0 0 1px var(--vl-border-strong);
+}
+
+@media (prefers-color-scheme: dark) {
+  [data-vl-theme='auto'] {
+    color-scheme: dark;
+    --vl-bg: #111114;
+    --vl-surface: #1a1a1f;
+    --vl-surface-raised: #222228;
+    --vl-surface-sunken: #141418;
+    --vl-surface-hover: #24242b;
+    --vl-text: #f2f2f5;
+    --vl-text-secondary: #b3b3bd;
+    --vl-text-muted: #8a8a95;
+    --vl-text-inverse: #111114;
+    --vl-border: #2c2c34;
+    --vl-border-strong: #3b3b45;
+    --vl-grid: #26262d;
+    --vl-axis: #3d3d47;
+    --vl-crosshair: #6f6f7b;
+    --vl-accent: #8f74ff;
+    --vl-accent-soft: #2a2347;
+    --vl-accent-text: #b4a3ff;
+    --vl-positive: #3cc47a;
+    --vl-positive-soft: #163626;
+    --vl-negative: #ff6680;
+    --vl-negative-soft: #3d1a22;
+    --vl-warning: #e8a33a;
+    --vl-warning-soft: #3a2b12;
+    --vl-neutral-soft: #26262d;
+    --vl-overlay: rgba(255, 255, 255, 0.04);
+    --vl-future: rgba(255, 255, 255, 0.03);
+    --vl-zone: rgba(255, 255, 255, 0.05);
+    --vl-cat-1: #8968f4;
+    --vl-cat-2: #d08f1e;
+    --vl-cat-3: #25a897;
+    --vl-cat-4: #e84461;
+    --vl-cat-5: #2389e2;
+    --vl-cat-6: #24ae56;
+    --vl-cat-7: #c46ad4;
+    --vl-cat-8: #8793a3;
+    --vl-cat-other: #7c7c86;
+    --vl-seq-from: #221d38;
+    --vl-seq-to: #a38cff;
+    --vl-div-neg: #ff6680;
+    --vl-div-mid: #2a2a31;
+    --vl-div-pos: #3cc47a;
+    --vl-shadow-card: 0 0 0 1px var(--vl-border);
+    --vl-shadow-pop: 0 10px 32px rgba(0, 0, 0, 0.5), 0 0 0 1px var(--vl-border-strong);
+  }
+}

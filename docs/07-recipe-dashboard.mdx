@@ -1,0 +1,67 @@
+import { Meta, Canvas } from '@storybook/blocks';
+import * as Examples from '../stories/examples/examples.stories';
+
+<Meta title="Recipes/Full dashboard" />
+
+# A full dashboard
+
+A dashboard is four layers, each a separate export of `vizloom/dashboard`:
+
+1. **`KpiStrip`** — the headline numbers. The delta sits under the number, not beside it, so the strip stays
+   readable at phone width. It becomes a 2-column grid when the container is narrow.
+2. **`DashboardGrid`** — a 12-column grid driven by **container queries**, not the viewport: the same dashboard
+   placed in a side panel collapses correctly. Every `ChartCard` takes `span={1..12}`.
+3. **`ChartCard`** — title, the `?` explanation, actions (segments, tabs, menus), a status slot and a body.
+   Its `state` prop renders loading, empty, no-access, partial and error consistently.
+4. Content — any chart, list or table.
+
+```tsx
+import { BarList, Sparkline } from 'vizloom/charts';
+import { TimeSeriesChart } from 'vizloom/charts';
+import { ChartCard, DashboardGrid, KpiStrip, Segmented } from 'vizloom/dashboard';
+import 'vizloom/styles.css';
+
+export function Sales({ kpis, source, byType }) {
+  const [metric, setMetric] = useState('tickets');
+  return (
+    <>
+      <KpiStrip items={kpis} />
+      <DashboardGrid>
+        <ChartCard
+          span={8}
+          title="Sales by day"
+          info="Tickets sold per hour, day or week — the detail follows the zoom."
+          actions={
+            <Segmented
+              aria-label="Metric"
+              value={metric}
+              onChange={setMetric}
+              options={[
+                { value: 'tickets', label: 'Tickets' },
+                { value: 'turnover', label: 'Turnover' },
+              ]}
+            />
+          }
+        >
+          <TimeSeriesChart title="Sales by day" series={series} source={source} metric={metric} stack="stack" />
+        </ChartCard>
+        <ChartCard span={4} title="By ticket type" state={byType ? { status: 'ready' } : { status: 'loading' }}>
+          {byType && <BarList title="By ticket type" items={byType} showShare scale="sum" />}
+        </ChartCard>
+      </DashboardGrid>
+    </>
+  );
+}
+```
+
+<Canvas of={Examples.Sales} />
+
+## On a phone
+
+Nothing changes in the code. Cards span the full width below the grid's narrow breakpoint, the KPI strip wraps
+into two columns, tooltips dock to the top of the chart so the finger does not hide them, and touch keeps vertical
+scrolling for the page (`touch-action: pan-y`) — horizontal drags pan the chart.
+
+<Canvas of={Examples.SalesPhone} />
+
+See every page under **Examples/Dashboards**.

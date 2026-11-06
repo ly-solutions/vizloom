@@ -1,0 +1,37 @@
+import { Meta, Canvas } from '@storybook/blocks';
+import * as Recipes from '../stories/recipes/recipes.stories';
+
+<Meta title="Recipes/Zoom with tiles" />
+
+# Zoom with tiles
+
+For long periods, do not ship every hourly point to the browser. Give the chart a **tile source** and it asks
+for exactly the window and granularity on screen:
+
+```ts
+import type { TileSource } from 'vizloom/core';
+
+export const source: TileSource<'floor' | 'vip', 'tickets'> = {
+  extent: { start: periodStart, end: periodEnd, now: Date.now() },
+  async load({ metric, granularity, range, signal }) {
+    const res = await fetch(`/api/sales?metric=${metric}&g=${granularity}&from=${range.start}&to=${range.end}`, { signal });
+    const body = await res.json();
+    // { start, step, length, values: { floor: number[], vip: number[] } }
+    return body;
+  },
+};
+```
+
+What you get for free:
+
+- **Granularity follows zoom** — hours when zoomed in, days or weeks when zoomed out (`granularityThresholds`
+  tunes the switch points).
+- **Cache and cancellation** — tiles are cached per metric × granularity × range; a request that went stale
+  while the user kept zooming is aborted through `signal`.
+- **No blank frames** — the previous frame stays on screen until the next one arrives.
+- **Navigator and buttons** — `navigator` draws the whole period with a draggable window, `zoomControls`
+  adds +/−/reset for users without a wheel or a trackpad. Keyboard: `+`, `−`, arrows, `0`.
+
+For a local array, `createLocalSource` builds the same contract with aggregation done in the browser.
+
+<Canvas of={Recipes.ZoomWithTiles} />

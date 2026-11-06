@@ -1,0 +1,154 @@
+{
+  "name": "vizloom",
+  "version": "0.1.0",
+  "description": "React charts, data tables and dashboard blocks: canvas time series with zoom and touch gestures, themeable with CSS variables, SSR-safe and tree-shakeable.",
+  "license": "MIT",
+  "author": "Sergey Chernyshev",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ly-solutions/vizloom.git"
+  },
+  "homepage": "https://github.com/ly-solutions/vizloom#readme",
+  "bugs": "https://github.com/ly-solutions/vizloom/issues",
+  "keywords": [
+    "react",
+    "charts",
+    "data-visualization",
+    "canvas",
+    "dashboard",
+    "data-table",
+    "time-series",
+    "sparkline"
+  ],
+  "type": "module",
+  "sideEffects": [
+    "**/*.css"
+  ],
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
+    },
+    "./core": {
+      "import": {
+        "types": "./dist/core.d.ts",
+        "default": "./dist/core.js"
+      },
+      "require": {
+        "types": "./dist/core.d.cts",
+        "default": "./dist/core.cjs"
+      }
+    },
+    "./charts": {
+      "import": {
+        "types": "./dist/charts.d.ts",
+        "default": "./dist/charts.js"
+      },
+      "require": {
+        "types": "./dist/charts.d.cts",
+        "default": "./dist/charts.cjs"
+      }
+    },
+    "./table": {
+      "import": {
+        "types": "./dist/table.d.ts",
+        "default": "./dist/table.js"
+      },
+      "require": {
+        "types": "./dist/table.d.cts",
+        "default": "./dist/table.cjs"
+      }
+    },
+    "./dashboard": {
+      "import": {
+        "types": "./dist/dashboard.d.ts",
+        "default": "./dist/dashboard.js"
+      },
+      "require": {
+        "types": "./dist/dashboard.d.cts",
+        "default": "./dist/dashboard.cjs"
+      }
+    },
+    "./styles.css": "./dist/styles.css",
+    "./core.css": "./dist/core.css",
+    "./charts.css": "./dist/charts.css",
+    "./table.css": "./dist/table.css",
+    "./dashboard.css": "./dist/dashboard.css",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE",
+    "NOTICE.md"
+  ],
+  "engines": {
+    "node": ">=18.18"
+  },
+  "packageManager": "pnpm@12.14.0",
+  "scripts": {
+    "build": "tsup && node scripts/build-css.mjs",
+    "dev": "tsup --watch",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "storybook": "storybook dev -p 6106 --host 127.0.0.1",
+    "build-storybook": "storybook build -o storybook-static --quiet",
+    "check:package": "publint --strict && attw --pack . --profile node16 --exclude-entrypoints styles.css core.css charts.css table.css dashboard.css",
+    "verify": "pnpm typecheck && pnpm lint && pnpm test && pnpm build && pnpm check:package",
+    "changeset": "changeset",
+    "release": "pnpm verify && changeset publish"
+  },
+  "peerDependencies": {
+    "react": "^18.2.0 || ^19.0.0",
+    "react-dom": "^18.2.0 || ^19.0.0"
+  },
+  "devDependencies": {
+    "@arethetypeswrong/cli": "0.18.5",
+    "@changesets/cli": "3.0.3",
+    "@eslint/js": "9.39.1",
+    "@storybook/addon-a11y": "8.6.19",
+    "@storybook/addon-docs": "8.6.19",
+    "@storybook/addon-essentials": "8.6.19",
+    "@storybook/addon-interactions": "8.6.19",
+    "@storybook/blocks": "8.6.19",
+    "@storybook/react": "8.6.19",
+    "@storybook/react-vite": "8.6.19",
+    "@storybook/test": "8.6.19",
+    "@testing-library/jest-dom": "6.9.1",
+    "@testing-library/react": "16.3.0",
+    "@testing-library/user-event": "14.6.1",
+    "@types/node": "22.15.30",
+    "@types/react": "18.3.23",
+    "@types/react-dom": "18.3.7",
+    "@vitejs/plugin-react": "4.7.0",
+    "esbuild": "0.25.12",
+    "eslint": "9.39.1",
+    "eslint-plugin-react-hooks": "5.2.0",
+    "globals": "16.2.0",
+    "jsdom": "26.1.0",
+    "prettier": "3.6.2",
+    "publint": "0.3.12",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "remark-gfm": "4.0.1",
+    "storybook": "8.6.19",
+    "tsup": "8.5.1",
+    "typescript": "5.9.3",
+    "typescript-eslint": "8.46.0",
+    "vite": "6.4.1",
+    "vitest": "3.2.4"
+  }
+}
